@@ -12,7 +12,6 @@ interface FiltersPanelProps {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
 
-  // new prop to reset categories
   setSelectedCategories: (cats: TaskCategory[]) => void;
 }
 
@@ -27,7 +26,7 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
   setSelectedCategories,
 }) => {
   const handleClear = () => {
-    setSelectedCategories(categories); // reset to all selected
+    setSelectedCategories(categories);
     setDurationFilter(null);
     setSearchQuery("");
   };
@@ -35,7 +34,6 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
   return (
     <>
       <div className="p-2 mb-[1rem] flex justify-between mb-4">
-        {/* Category filters */}
         <div className="flex gap-4">
           {categories.map((c) => (
             <label key={c} className="flex items-center gap-1">
@@ -49,7 +47,6 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
           ))}
         </div>
 
-        {/* Time-based filters */}
         <div className="flex gap-4">
           {[1, 2, 3].map((w) => (
             <label key={w} className="flex items-center gap-1">
@@ -64,7 +61,6 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
           ))}
         </div>
 
-        {/* Search */}
         <input
           type="text"
           placeholder="Search tasks..."
@@ -81,7 +77,6 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
         />
       </div>
 
-      {/* Clear button */}
       <button
         type="button"
         className="ml-2 text-sm underline"

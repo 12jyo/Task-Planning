@@ -21,18 +21,14 @@ export const Calendar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [durationFilter, setDurationFilter] = useState<number | null>(null);
 
-  // drag select
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<Date | null>(null);
   const [dragEnd, setDragEnd] = useState<Date | null>(null);
 
-  // resize
   const [resizing, setResizing] = useState<{ taskId: string; edge: "start" | "end" } | null>(null);
 
-  // drag whole task
   const [dragTask, setDragTask] = useState<Task | null>(null);
 
-  // load tasks from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
     if (saved) {
@@ -41,7 +37,6 @@ export const Calendar: React.FC = () => {
     }
   }, []);
 
-  // save tasks to localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -61,7 +56,6 @@ export const Calendar: React.FC = () => {
   };
   const finalRange = getRange();
 
-  // resizing
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
       if (!resizing) return;
@@ -93,7 +87,6 @@ export const Calendar: React.FC = () => {
     };
   }, [resizing]);
 
-  // reschedule task by drag/drop
   const handleDropTask = (date: Date) => {
     if (!dragTask) return;
     const duration =
@@ -106,7 +99,6 @@ export const Calendar: React.FC = () => {
     setDragTask(null);
   };
 
-  // filters
   const filteredTasks = tasks.filter((t) => {
     const matchesCategory = selectedCategories.includes(t.category);
     const matchesName = t.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -158,9 +150,9 @@ export const Calendar: React.FC = () => {
               const end = new Date(t.end).setHours(0, 0, 0, 0);
               return day >= start && day <= end;
             })}
-            isSelected={
+            isSelected={!!(
               isDragging && finalRange && d >= finalRange.start && d <= finalRange.end
-            }
+            )}
             onMouseDown={() => {
               setIsDragging(true);
               setDragStart(d);

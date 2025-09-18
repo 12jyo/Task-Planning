@@ -29,16 +29,31 @@ export const Calendar: React.FC = () => {
 
   const [dragTask, setDragTask] = useState<Task | null>(null);
 
+  type StoredTask = Omit<Task, "start" | "end"> & { start: string; end: string };
+
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
     if (saved) {
-      const parsed = JSON.parse(saved);
-      setTasks(parsed.map((t: Task) => ({ ...t, start: new Date(t.start), end: new Date(t.end) })));
+      try {
+        const parsed = JSON.parse(saved) as StoredTask[];
+        setTasks(
+          parsed.map((t) => ({
+            ...t,
+            start: new Date(t.start),
+            end: new Date(t.end),
+          }))
+        );
+      } catch (e) {
+        console.error("Failed to parse tasks from localStorage", e);
+        setTasks([]);
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
   }, [tasks]);
 
   const handleSaveTask = (task: Omit<Task, "id">) => {
